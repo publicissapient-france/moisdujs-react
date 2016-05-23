@@ -1,29 +1,35 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var StatsPlugin = require('stats-webpack-plugin');
 
 module.exports = {
-    devtool: 'eval-source-map',
-    entry: [
-        'webpack-dev-server/client?http://0.0.0.0:3000',
-        'webpack/hot/only-dev-server',
-        './src/index'
-    ],
+    entry: './src/index',
     output: {
         path: path.join(__dirname, 'dist'),
-        filename: 'bundle.js',
+        filename: 'bundle-[hash].min.js',
         publicPath: '/'
     },
     plugins: [
+        new webpack.optimize.OccurenceOrderPlugin(),
         new HtmlWebpackPlugin({
             template: 'index.html',
             inject: 'body',
             filename: 'index.html'
         }),
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('development')
+        new webpack.optimize.UglifyJsPlugin({
+            compressor: {
+                warnings: false,
+                screw_ie8: true
+            }
         }),
-        new webpack.HotModuleReplacementPlugin()
+        new StatsPlugin('webpack.stats.json', {
+            source: false,
+            modules: false
+        }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+        })
     ],
     resolve: {
         root: path.resolve(__dirname),

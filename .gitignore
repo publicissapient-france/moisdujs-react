@@ -4,5 +4,6 @@ npm-debug.log
 # IntelliJ directory
 .idea/
 
-# Node dependencies
+# Node directories
 node_modules
+dist
