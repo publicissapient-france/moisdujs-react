@@ -1,15 +1,18 @@
-import './SlotForm.css'
+import "./SlotForm.css";
 
-import {connect} from 'react-redux'
-import SlotForm from './SlotForm'
-import {addSlot} from 'actions'
+import {bindActionCreators} from "redux";
+import {connect} from "react-redux";
+import SlotForm from "./SlotForm";
+import {addSlot, slotFormChanged} from "actions";
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
     return {
-        onAddSlot: (slot) => {
-            dispatch(addSlot(slot.column, slot.name))
-        }
+        slotForm: state.slotForm
     }
 };
 
-export default connect(null, mapDispatchToProps)(SlotForm);
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({addSlot, slotFormChanged}, dispatch)
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SlotForm);
